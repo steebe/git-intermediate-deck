@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h3>git: Intermediate Concepts and Commands</h3>
+					<p>
+						<small>
+							Created by: Steve Bass
+							<br />
+							June, 2019 |
+							<a href="http://stevebass.me" target="_blank">stevebass.me</a>
+						</small>
+					</p>
+        </section>
+
+				<section><h1>$ git help</h1></section>
+				<section>
+					<pre><code>$ git help</code></pre>
+					<ul>
+						<li>Your new best friend</li>
+						<li>On windows, opens a webpage version of the manual page of the command argument provided</li>
+						<li>Within a proper linux shell environment, prints the man page of the command argument provided</li>
+					</ul>
+				</section>
+
+				<section><h1>$ git cherry-pick</h1></section>
+				<section>
+					<pre><code>$ git cherry-pick</code></pre>
+					<ul>
+						<li>Cherry picking is simply taking specific commits from git history and applying them onto a different branch</li>
+						<li>Arguments are the SHA-1 hashes associated with the commits desired</li>
+						<li>When multiple hashes are provided, they are applied to the current branch in order of left to right</li>
+					</ul>
+				</section>
+				<section>
+					<pre>
+						<code>
+(master)$ git log
+  de34123f
+  hi442ihl
+  4jfl113n
+(master)$ git checkout my-branch
+(my-branch)$ git cherry-pick 4jfl113n de34123f
+(my-branch)$ git log
+  de34123f
+  4jfl113n
+						</code>
+					</pre>
+					<image src="lib/img/cherry_pick.png"></image>
+					<br/>
+					<small>Source: <a href="https://www.ralfebert.de/git/cherry-pick/">ralfebert.de</a></small>
+				</section>
+				<section>
+					<h3>Cherry Picking: Pros/Cons</h3>
+					<small>
+						<div class="multiCol">
+							<div class="col">
+								<b>Pros</b>
+								<ul>
+									<li>Specific features can be escalated to other branches</li>
+								</ul>
+							</div>
+							<div class="col">
+								<b>Cons</b>
+								<ul>
+									<li>New SHA-1 hash codes for each selected commit are applied in the destination branch</li>
+									<li>Its success is heavily dependent on the state of the branch of execution</li>
+								</ul>
+							</div>
+						</div>
+					</small>
+				</section>
+
+				<section><h1>$ git mergetool</h1></section>
+				<section>
+					<pre><code>$ git mergetool</code></pre>
+					<div class="multiCol">
+						<div class="col">
+							<ul>
+								<li>When downloaded and referenced in a <b>.gitconfig</b>, a merge tool will be invoked</li>
+								<li>Merge tools provide a better merge conflict resolution experience</li>
+							</ul>
+						</div>
+						<div class="col" style="text-align: center">
+							<b>.gitconfig</b> entries:
+							<pre>
+								<code>
+[merge]
+  tool = kdiff3
+[mergetool "kdiff3"]
+  path = /path/to/kdiff3.exe
+  keepBackup = false
+  trustExitCode = false
+								</code>
+							</pre>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h2>Merge Tools</h2>
+					<ul>
+						<li><a href="http://kdiff3.sourceforge.net/">Kdiff3</a></li>
+						<li><a href="https://www.scootersoftware.com">Beyond Compare</a></li>
+						<li><a href="https://meldmerge.org">Meld Merge</a></li>
+						<li><a href="https://sourcegear.com/diffmerge">Diff Merge</a></li>
+					</ul>
+				</section>
+
+				<section><h1>$ git merge</h1></section>
+				<section>
+					<pre><code>$ git merge</code></pre>
+					<ul>
+						<li>When executed on a branch, will merge the argument branch into the currently checked out branch</li>
+					</ul>
+				</section>
+
+				<section><h1>$ git rebase</h1></section>
+				<section>
+					<pre><code>$ git rebase</code></pre>
+					<ul>
+						<li>Rebasing is exactly what it sounds like 😁</li>
+						<li>Interactive rebasing is a powerful method of keeping history clean</li>
+						<small>
+							<ul>
+								<li>Provokes additional review of new commits by original author</li>
+								<li>Allows for squashing (consolidating) commits</li>
+							</ul>
+						</small>
+					</ul>
+				</section>
+
+				<section>
+					<pre>
+						<code>
+(master)$ git pull
+(master)$ git checkout my-branch
+(my-branch)$ git log
+  dj43j5k3  # not yet on master
+(my-branch)$ git rebase -i master
+# Enter interactive rebase session in text editor to pick/squash/delete dj43j5k3
+						</code>
+					</pre>
+					<small>
+						<div class="multiCol">
+							<div class="col">
+								<img src="lib/img/rebase.png" />
+							</div>
+							<div class="col">
+								Source: <a href="https://medium.com/@richarderdos/git-rebase-tips-tricks-164734a2e47d">medium.com/@richarderdos</a>
+							</div>
+						</div>
+					</small>
+				</section>
+
+				<section><h1>$ git revert</h1></section>
+				<section>
+					<pre><code>$ git revert</code></pre>
+					<p>
+						Review:
+					</p>
+					<ul>
+						<small>
+							<li>Git commits are created as a git <b>object</b> stored within <u>.git/objects</u> whose contents are hashed into a checksum</li>
+						</small>
+						<li><b>Revert</b>ing backs out the changes of a specific commit</li>
+						<li>Reverting creates a "revert commit"</li>
+						<small>
+							<ul>
+								<li>Revert commits can also be reverted, which re-introduces the reverted commit</li>
+							</ul>
+						</small>
+					</ul>
+				</section>
+				<section>
+					<img src="lib/img/revert.png" />
+					<br />
+					<small>Source: <a href="https://saraford.net/2017/03/25/how-to-use-git-revert-to-undo-a-previous-commit-084/">saraford.net</a></small>
+				</section>
+
+				<section>
+					<h3>Deleting Sensitive Data</h3>
+					<ul>
+						<li>Legacy: <b>git-filter-branch</b></li>
+						<ul><li><a href="https://git-scm.com/docs/git-filter-branch">https://git-scm.com/docs/git-filter-branch</a></li></ul>
+						<li>Today: <b>BFG</b></li>
+						<ul><li><a href="https://rtyley.github.io/bfg-repo-cleaner/">https://rtyley.github.io/bfg-repo-cleaner/</a></li></ul>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Conclusion</h3>
+					<p>Be diligent about:</p>
+					<ol>
+						<li>$ git help</li>
+						<li>Pulling early, and pulling often</li>
+						<li>Organizing changes into minimal, logical commits</li>
+						<li>Getting comfortable with merge tools</li>
+					</ol>
+				</section>
+
+				<section>
+					<h3>Helpful Links</h3>
+					<ul>
+						<li>Atlassian's git cheat sheet - <a href="https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet">PDF Download</a></li>
+						<li>Atlassian <a href="https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet">article</a> on Merging vs. Rebasing, and when each is appropriate</li>
+						<li>The entire <a href="https://git-scm.com/book/en/v2">Pro Git book</a> by authors <b>Scott Chacon</b> and <b>Ben Straub</b></li>
+					</ul>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				hash: true,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/highlight/highlight.js' },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
